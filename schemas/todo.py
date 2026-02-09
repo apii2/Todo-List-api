@@ -13,5 +13,4 @@ class TodoCreate(SQLModel):
     name:str
     
 class TodoUpdate(SQLModel):
-    name: str | None = None
-    completed: bool | None = None
+    completed:bool 

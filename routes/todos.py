@@ -16,7 +16,7 @@ def postTodo(todo_data: TodoCreate, session: SessionDep):
     session.add(todo)
     session.commit()
     session.refresh(todo)
-    return {"message": "Todo created successfully"}
+    return {"message": "Task added successfully"}
 
 @router.delete("/{todo_id}/delete")
 def deleteTodo(todo_id: int, session: SessionDep):
@@ -25,7 +25,15 @@ def deleteTodo(todo_id: int, session: SessionDep):
         raise HTTPException(status_code=404, detail={"error": "Todo not found"})
     session.delete(todo)
     session.commit()
-    return {"message": "Todo deleted successfully"}
+    return {"message": "Task deleted successfully"}
+
+@router.delete("/completed/delete")
+def deleteCompletedTodo(session: SessionDep):
+    todos = session.exec(select(Todo).where(Todo.completed == True)).all()
+    for todo in todos:
+        session.delete(todo)
+    session.commit()
+    return {"message": "Completed tasks deleted successfully"}
 
 @router.patch("/{todo_id}/update", response_model=TodoResponse)
 def toggleCompleted(todo_id: int, todo_data: TodoUpdate, session: SessionDep):
@@ -36,4 +44,4 @@ def toggleCompleted(todo_id: int, todo_data: TodoUpdate, session: SessionDep):
     session.add(todo)
     session.commit()
     session.refresh(todo)
-    return {"message": "Todo updated successfully!", "results": [todo]}
+    return {"message": "Task updated successfully!", "results": [todo]}
