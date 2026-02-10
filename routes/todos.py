@@ -27,7 +27,7 @@ def deleteTodo(todo_id: int, session: SessionDep):
     session.commit()
     return {"message": "Task deleted successfully"}
 
-@router.delete("/completed/delete")
+@router.delete("/delete/completed")
 def deleteCompletedTodo(session: SessionDep):
     todos = session.exec(select(Todo).where(Todo.completed == True)).all()
     for todo in todos:
